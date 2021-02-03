@@ -1,0 +1,36 @@
+91 Startup Terms Every Entrepreneur Should Know
+The first to execute * Founder
+Someone who is going to start * Wantrepreneur
+Founders who don't code * Non-Technical
+Providing market need * Validation
+Growth with a repeatable model * Scalability
+A timed program for building startups * Accelerator
+A mentoring and guidance program for entrepreneurs * Incubator
+Startup valued at over $1 billion * Unicorn
+Startup raises over $1 billion * Dragon
+Relying on self-funding * Bootstrapping
+Minor change in the business model * Iteration
+Major change in the business model * Pivot
+Creation of new markets and opportunities * Disruption
+The product version with only core features for testing * MVP,Minimum Viable Product
+Methodology based on quick adaption * Lean
+Incremental and Iterative development methodology * Agile
+Mergers, acquisition, or IPO of a startup * Exit
+Software is license on a subscription basis * SaaS
+Platform for running and managing an application * PaaS
+Acquisition of a startup for its talent * Acqui-hire,acquihire
+Incomplete product version  for internal testing * Alpha Release,Alpha
+Partially complete product for testing and feedback * Beta Release,Beta
+Group of experts who oversee activities of a startup * Board of Directors
+A business role in a startup * Business Development
+Template for business model generation * BM Canvas
+A chart with a sharp increase or decrease * Hockey Stick
+A brief startup presentation * Pitch deck,Pitch
+A pricing strategy in which products are free * Freemium
+The product's benefits for who, and how * Value proposition
+Products for sale to an enterprise * Enterprise Products
+Startup's unique differentiator * Competitive advantage, advantage
+Rights protecting innovation * Intellectual property, IP
+Method for discovering and validating the market * Customer Development
+
+
