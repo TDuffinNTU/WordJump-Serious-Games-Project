@@ -8,69 +8,92 @@ public class PlatformController : MonoBehaviour
     private List<GameObject> Platforms;
     public GameObject PlatformPrefab;
     private Rigidbody2D PlayerRB;
-    private float NextSpawn = 5f;
-    private const float NS_INTERVAL = 80f;
 
+    private int CurrentScreen; // number of screens that have been generated
     [SerializeField]
-    private float TotalClimbed = 0f;
-    [SerializeField]
-    private float HighY = -10f;
-    
+    private Vector2 ScreenDims; // Screen dimensions, depends on camera and resolution
+    private Vector2 HalfDims;
+
+    public int Scale = 1;
+    public int Magnitude = 1;
+    public int Exponent = 1;
+    public int Min = 0;
+    public Vector2 Resolution = new Vector2(5, 5);
+    private int Seed;
+    private int NextSpawnInterval;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        CurrentScreen = 0;
+        Seed = Random.Range(1, 99999);
         Platforms = new List<GameObject>();
         PlayerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
-        
+        ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x, CameraExtensions.OrthographicBounds(Camera.main).size.y);
+        HalfDims = ScreenDims / 2;
 
         // Spawn platform below player
-        Platforms.Add(Instantiate(PlatformPrefab, 
-            new Vector3(0, PlayerRB.transform.position.y - 10, 0), Quaternion.identity));
+        //Spawn(0, PlayerRB.transform.position.y - 0.2f);
 
-        Spawn();
+        // generate first two screens
+        GenerateScreen();
+        GenerateScreen();
     }
+
+    //rect PlatformBounds() { 
+
+    //    return SpriteRenderer
+    //}
+
+    public void GenerateScreen() 
+    {
+        float xStep = (ScreenDims.x / Resolution.x);  
+        float yStep = (ScreenDims.y / Resolution.y);  
+
+        for (int y = 0; y < Resolution.y; y++) 
+        {
+            if (y == 0 && CurrentScreen == 0) continue; // ignore first row
+
+
+            int blocksOnRow = 0;
+            for (int x = 0; x < Resolution.x; x++) 
+            {
+                // convert to gamespace coordinates
+                float px = (x*xStep) - (HalfDims.x) + 0.11f;       
+                float py = ((y*yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
+
+                if (Random.Range(0, (int)Resolution.x/2 + 1) == 1)
+                {
+                    Spawn(px, py);
+                    blocksOnRow++;
+                }          
+            }
+                                    // TODO -- We can make this less dorky using a while loop with multiple exit clauses.
+            if (blocksOnRow == 0)   // if by random chance the previous algorithm failed, we'll do it once more for certain
+            {
+                float px = (Random.Range(0,Resolution.x) * xStep) - (HalfDims.x) + 0.11f;
+                float py = ((y * yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
+                Spawn(px, py);
+            }
+        }
+
+        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));
+        CurrentScreen++;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        float py = PlayerRB.transform.position.y;
-        if (py > HighY) 
+        if (GameObject.FindGameObjectWithTag("Player").transform.position.y > NextSpawnInterval) 
         {
-            TotalClimbed += (py - HighY);
-            HighY = py;
-
-            if (HighY > NextSpawn) 
-            {
-                Spawn();
-                NextSpawn += NS_INTERVAL;
-            }
+            GenerateScreen();
         }
     }
 
-    void Spawn()
+    void Spawn(float x, float y)
     {
-        float px = PlayerRB.transform.position.x;
-        float py = PlayerRB.transform.position.y;
-
-        int LayersPerSpawn = 4;
-
-        for (int i = 0; i < LayersPerSpawn; i++)
-        {
-            for (int j = 0; j < Random.Range(1, 2); j++)
-            {
-                float x = Random.Range(px - 20, px + 20);
-                float y = NextSpawn + (NS_INTERVAL / (i+1));
-                float scale = Random.Range(0.8f, 1.5f);
-
-                var newPlatform = Instantiate(PlatformPrefab, new Vector3(x, y, 0),
-                    Quaternion.identity);
-
-                newPlatform.transform.localScale = new Vector3(scale, 0.2f, 1);
-
-                Platforms.Add(newPlatform);
-            }
-        }
+        Platforms.Add(Instantiate(PlatformPrefab, new Vector3(x, y, 0), Quaternion.identity));
     }
 
     void Despawn() { }
