@@ -4,56 +4,54 @@ using UnityEngine;
 
 
 public class PlatformController : MonoBehaviour
-{
-    private List<GameObject> Platforms;
+{    
+    private List<GameObject> PlatformList;
+    private Queue<List<GameObject>> ScreenQueue;
     public GameObject PlatformPrefab;
-    private Rigidbody2D PlayerRB;
+    public Vector3 FirstPlatform;
+
+    private GameObject Player;
+    private BackgroundController _BackgroundController;
 
     private int CurrentScreen; // number of screens that have been generated
-    [SerializeField]
+
     private Vector2 ScreenDims; // Screen dimensions, depends on camera and resolution
     private Vector2 HalfDims;
 
-    public int Scale = 1;
-    public int Magnitude = 1;
-    public int Exponent = 1;
-    public int Min = 0;
     public Vector2 Resolution = new Vector2(5, 5);
-    private int Seed;
     private int NextSpawnInterval;
 
+    
     // Start is called before the first frame update
     public void Start()
-    {
+    {        
         CurrentScreen = 0;
-        Seed = Random.Range(1, 99999);
-        Platforms = new List<GameObject>();
-        PlayerRB = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
-        ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x, CameraExtensions.OrthographicBounds(Camera.main).size.y);
+        PlatformList = new List<GameObject>();
+        ScreenQueue = new Queue<List<GameObject>>();
+        Player = GameObject.FindGameObjectWithTag("Player");
+
+        _BackgroundController = GameObject.FindObjectOfType<BackgroundController>();
+
+        ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x, 
+            CameraExtensions.OrthographicBounds(Camera.main).size.y);
         HalfDims = ScreenDims / 2;
 
-        // Spawn platform below player
-        //Spawn(0, PlayerRB.transform.position.y - 0.2f);
+        Instantiate(PlatformPrefab, FirstPlatform, Quaternion.identity);
 
         // generate first two screens
         GenerateScreen();
         GenerateScreen();
     }
 
-    //rect PlatformBounds() { 
-
-    //    return SpriteRenderer
-    //}
-
     public void GenerateScreen() 
     {
+        _BackgroundController.NextBackground();
         float xStep = (ScreenDims.x / Resolution.x);  
         float yStep = (ScreenDims.y / Resolution.y);  
 
         for (int y = 0; y < Resolution.y; y++) 
         {
             if (y == 0 && CurrentScreen == 0) continue; // ignore first row
-
 
             int blocksOnRow = 0;
             for (int x = 0; x < Resolution.x; x++) 
@@ -69,7 +67,7 @@ public class PlatformController : MonoBehaviour
                 }          
             }
                                     // TODO -- We can make this less dorky using a while loop with multiple exit clauses.
-            if (blocksOnRow == 0)   // if by random chance the previous algorithm failed, we'll do it once more for certain
+            if (blocksOnRow == 0)   // Ensures theres at least one platform per row.
             {
                 float px = (Random.Range(0,Resolution.x) * xStep) - (HalfDims.x) + 0.11f;
                 float py = ((y * yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
@@ -77,25 +75,51 @@ public class PlatformController : MonoBehaviour
             }
         }
 
-        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));
+        ScreenQueue.Enqueue(PlatformList);
+        PlatformList = new List<GameObject>();
+
+        if (CurrentScreen > 2) 
+        {
+            DeleteScreen();
+        }
+
+        // load/despawn screen platforms out of player view
+        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));        
+        
         CurrentScreen++;
     }
 
+    void Spawn(float x, float y)
+    {
+        PlatformList.Add(Instantiate(PlatformPrefab, new Vector3(x, y, 0), Quaternion.identity));
+    }
+
+    void DeleteScreen() 
+    {
+        List<GameObject> toKill = ScreenQueue.Dequeue();
+        foreach (var obj in toKill) 
+        {
+            GameObject.Destroy(obj);
+        }
+
+        toKill.Clear();
+    }
+        
 
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindGameObjectWithTag("Player").transform.position.y > NextSpawnInterval) 
+        if (Player.transform.position.y > NextSpawnInterval) 
         {
             GenerateScreen();
         }
     }
 
-    void Spawn(float x, float y)
+    public void Replay() 
     {
-        Platforms.Add(Instantiate(PlatformPrefab, new Vector3(x, y, 0), Quaternion.identity));
+        GameObject[] plats = GameObject.FindGameObjectsWithTag("Platform");
+        foreach (var plat in plats) { Destroy(plat); }
+        _BackgroundController.Replay();
+        Start();
     }
-
-    void Despawn() { }
-    
 }
