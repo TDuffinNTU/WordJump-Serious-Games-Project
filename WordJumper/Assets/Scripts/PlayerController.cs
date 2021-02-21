@@ -42,7 +42,9 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.y <= 0 && onFloor)
         {            
             rb.velocity = new Vector2(rb.velocity.x, YSpeed);
-        }        
+        }
+
+        sr.flipX = InputX.x < 0 ? true : false;
 
         an.SetFloat("YSpeed", rb.velocity.y);
 
