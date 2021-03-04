@@ -24,14 +24,9 @@ public class ScoreController : MonoBehaviour
     {
         float yPos = Player.transform.position.y;
 
-        if (yPos > Score) {
+        if (yPos/2 > Score) {
             AddScore(1);
         }
-    }
-
-    int CoordinatesToScore() 
-    {
-        return 1;    
     }
 
     public void AddScore(int score) 

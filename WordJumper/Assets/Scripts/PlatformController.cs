@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 public class PlatformController : MonoBehaviour
-{    
+{
     private List<GameObject> PlatformList;
     private Queue<List<GameObject>> ScreenQueue;
     public GameObject PlatformPrefab;
@@ -21,10 +21,10 @@ public class PlatformController : MonoBehaviour
     public Vector2 Resolution = new Vector2(5, 5);
     private int NextSpawnInterval;
 
-    
+
     // Start is called before the first frame update
     public void Start()
-    {        
+    {
         CurrentScreen = 0;
         PlatformList = new List<GameObject>();
         ScreenQueue = new Queue<List<GameObject>>();
@@ -32,8 +32,9 @@ public class PlatformController : MonoBehaviour
 
         _BackgroundController = GameObject.FindObjectOfType<BackgroundController>();
 
-        ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x, 
+        ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x,
             CameraExtensions.OrthographicBounds(Camera.main).size.y);
+        Debug.Log(ScreenDims);
         HalfDims = ScreenDims / 2;
 
         Instantiate(PlatformPrefab, FirstPlatform, Quaternion.identity);
@@ -43,33 +44,33 @@ public class PlatformController : MonoBehaviour
         GenerateScreen();
     }
 
-    public void GenerateScreen() 
+    public void GenerateScreen()
     {
         _BackgroundController.NextBackground();
-        float xStep = (ScreenDims.x / Resolution.x);  
-        float yStep = (ScreenDims.y / Resolution.y);  
+        float xStep = (ScreenDims.x / Resolution.x);
+        float yStep = (ScreenDims.y / Resolution.y);
 
-        for (int y = 0; y < Resolution.y; y++) 
+        for (int y = 0; y < Resolution.y; y++)
         {
             if (y == 0 && CurrentScreen == 0) continue; // ignore first row
 
             int blocksOnRow = 0;
-            for (int x = 0; x < Resolution.x; x++) 
+            for (int x = 0; x < Resolution.x; x++)
             {
                 // convert to gamespace coordinates
-                float px = (x*xStep) - (HalfDims.x) + 0.11f;       
-                float py = ((y*yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
+                float px = (x * xStep) - (HalfDims.x) + 0.11f;
+                float py = ((y * yStep) + (CurrentScreen * ScreenDims.y));
 
-                if (Random.Range(0, (int)Resolution.x/2 + 1) == 1)
+                if (Random.Range(0, (int)Resolution.x / 2 + 1) == 1)
                 {
                     Spawn(px, py);
                     blocksOnRow++;
-                }          
+                }
             }
-                                    // TODO -- We can make this less dorky using a while loop with multiple exit clauses.
+            // TODO -- We can make this less dorky using a while loop with multiple exit clauses.
             if (blocksOnRow == 0)   // Ensures theres at least one platform per row.
             {
-                float px = (Random.Range(0,Resolution.x) * xStep) - (HalfDims.x) + 0.11f;
+                float px = (Random.Range(0, Resolution.x) * xStep) - (HalfDims.x) + 0.11f;
                 float py = ((y * yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
                 Spawn(px, py);
             }
@@ -78,15 +79,40 @@ public class PlatformController : MonoBehaviour
         ScreenQueue.Enqueue(PlatformList);
         PlatformList = new List<GameObject>();
 
-        if (CurrentScreen > 2) 
+        if (CurrentScreen > 2)
         {
             DeleteScreen();
         }
 
         // load/despawn screen platforms out of player view
-        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));        
-        
+        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));
+
         CurrentScreen++;
+    }
+
+    class row 
+    {
+        public int y;
+        public List<GameObject> plats;
+    }
+
+    void NewGen()
+    {
+        Vector2 pos_start;
+        float int_plat = 10f;
+        float int_screen = 100f;
+        row row_plats;
+        Queue<row> all_rows;
+        int num_rows = (int)(int_screen / int_plat);
+        int num_cols = 5;
+
+        for (int i = 0; i < num_rows; i++) 
+        {
+            
+        }
+
+        
+
     }
 
     void Spawn(float x, float y)
