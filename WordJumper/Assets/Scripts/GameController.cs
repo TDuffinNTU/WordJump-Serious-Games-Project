@@ -35,7 +35,7 @@ public  class GameController : MonoBehaviour
     void Update()
     {
         // player loses if they fall off the bottom of screen, calculated here
-        killY = _Cmr.transform.position.y - CameraExtensions.OrthographicBounds(Camera.main).size.y/2f;
+        killY = CameraExtensions.GetEdges(Camera.main)[3];
         if (_Plr.transform.position.y < killY) 
         {
             SetGamestate("PAUSED");

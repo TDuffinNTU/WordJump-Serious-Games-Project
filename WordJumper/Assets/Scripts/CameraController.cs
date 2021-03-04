@@ -59,4 +59,20 @@ public static class CameraExtensions
     {
         return camera.orthographicSize;
     }
+
+    // returns single float positions of each edge in order: LEFT, TOP, RIGHT, BOTTOM
+    public static List<float> GetEdges(this Camera camera) 
+    {
+        Bounds bounds = OrthographicBounds(camera);
+        Vector2 halfsize = bounds.size / 2f;
+
+        List<float> edges = new List<float>();
+        
+        edges.Add(camera.transform.position.x - halfsize.x);
+        edges.Add(camera.transform.position.y + halfsize.y);
+        edges.Add(camera.transform.position.x + halfsize.x);
+        edges.Add(camera.transform.position.y - halfsize.y);
+
+        return edges;
+    }
 }

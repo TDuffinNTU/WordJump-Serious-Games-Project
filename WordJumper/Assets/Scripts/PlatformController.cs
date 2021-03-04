@@ -19,100 +19,74 @@ public class PlatformController : MonoBehaviour
     private Vector2 HalfDims;
 
     public Vector2 Resolution = new Vector2(5, 5);
-    private int NextSpawnInterval;
 
+
+
+    // Newgen stuff
+    public int cols = 5;
+
+    public float intervalY = 2.2f;
+    [SerializeField]
+    private float nextY;
+    [SerializeField]
+    private List<List<GameObject>> Rows;
 
     // Start is called before the first frame update
     public void Start()
     {
         CurrentScreen = 0;
         PlatformList = new List<GameObject>();
+        Rows = new List<List<GameObject>>();
+        nextY = FirstPlatform.y;
         ScreenQueue = new Queue<List<GameObject>>();
         Player = GameObject.FindGameObjectWithTag("Player");
 
         _BackgroundController = GameObject.FindObjectOfType<BackgroundController>();
 
         ScreenDims = new Vector2(CameraExtensions.OrthographicBounds(Camera.main).size.x,
-            CameraExtensions.OrthographicBounds(Camera.main).size.y);
-        Debug.Log(ScreenDims);
+            CameraExtensions.OrthographicBounds(Camera.main).size.y);        
         HalfDims = ScreenDims / 2;
 
-        Instantiate(PlatformPrefab, FirstPlatform, Quaternion.identity);
 
-        // generate first two screens
-        GenerateScreen();
-        GenerateScreen();
-    }
+        Rows.Add(new List<GameObject>()
+        {
+            Instantiate(PlatformPrefab, FirstPlatform, Quaternion.identity)
+        });
 
-    public void GenerateScreen()
-    {
+        // generate rows of platforms
+        GenerateRows(5);
         _BackgroundController.NextBackground();
-        float xStep = (ScreenDims.x / Resolution.x);
-        float yStep = (ScreenDims.y / Resolution.y);
+        _BackgroundController.NextBackground();        
+    }  
 
-        for (int y = 0; y < Resolution.y; y++)
+
+    void GenerateRows(int count)
+    {             
+        float cameraTopY = CameraExtensions.GetEdges(Camera.main)[1]; // position of top edge in y axis               
+
+        for (int c = 0; c < count; c++)  
         {
-            if (y == 0 && CurrentScreen == 0) continue; // ignore first row
-
-            int blocksOnRow = 0;
-            for (int x = 0; x < Resolution.x; x++)
+            nextY += intervalY;
+            List<GameObject> row = new List<GameObject>();
+            for (int x = 0; x < cols; x++) 
             {
-                // convert to gamespace coordinates
-                float px = (x * xStep) - (HalfDims.x) + 0.11f;
-                float py = ((y * yStep) + (CurrentScreen * ScreenDims.y));
-
-                if (Random.Range(0, (int)Resolution.x / 2 + 1) == 1)
-                {
-                    Spawn(px, py);
-                    blocksOnRow++;
-                }
+                float xStep = (ScreenDims.x / cols);
+                float px = (x * xStep) - (HalfDims.x) + .6f ;
+                row.Add(Instantiate(PlatformPrefab, new Vector3(px, nextY, 0), Quaternion.identity));
             }
-            // TODO -- We can make this less dorky using a while loop with multiple exit clauses.
-            if (blocksOnRow == 0)   // Ensures theres at least one platform per row.
+
+            int rand = Random.Range(cols/2, cols);
+            Debug.Log(rand);
+            for (int i = 0; i < rand; i++) // remove between 1 and col minus 1 platforms per row
             {
-                float px = (Random.Range(0, Resolution.x) * xStep) - (HalfDims.x) + 0.11f;
-                float py = ((y * yStep) + (CurrentScreen * ScreenDims.y)) - (HalfDims.y);
-                Spawn(px, py);
+                int index = Random.Range(0, row.Count);
+                Destroy(row[index]);                
+                row.RemoveAt(index);
             }
+
+            Rows.Add(row);
         }
-
-        ScreenQueue.Enqueue(PlatformList);
-        PlatformList = new List<GameObject>();
-
-        if (CurrentScreen > 2)
-        {
-            DeleteScreen();
-        }
-
-        // load/despawn screen platforms out of player view
-        NextSpawnInterval = (int)(((CurrentScreen) * ScreenDims.y) - (HalfDims.y));
-
-        CurrentScreen++;
-    }
-
-    class row 
-    {
-        public int y;
-        public List<GameObject> plats;
-    }
-
-    void NewGen()
-    {
-        Vector2 pos_start;
-        float int_plat = 10f;
-        float int_screen = 100f;
-        row row_plats;
-        Queue<row> all_rows;
-        int num_rows = (int)(int_screen / int_plat);
-        int num_cols = 5;
-
-        for (int i = 0; i < num_rows; i++) 
-        {
-            
-        }
-
         
-
     }
 
     void Spawn(float x, float y)
@@ -135,10 +109,20 @@ public class PlatformController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Player.transform.position.y > NextSpawnInterval) 
-        {
-            GenerateScreen();
+        if (Rows[0][0].transform.position.y < CameraExtensions.GetEdges(Camera.main)[3]) 
+        {           
+            var row = Rows[0];
+            foreach (var plat in row) 
+            {
+                Destroy(plat);
+            }
+            Rows.RemoveAt(0);
+            GenerateRows(1);
         }
+        
+        
+        
+
     }
 
     public void Replay() 

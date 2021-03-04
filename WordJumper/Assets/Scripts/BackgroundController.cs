@@ -5,7 +5,7 @@ using UnityEngine;
 public class BackgroundController : MonoBehaviour
 {
     public GameObject BackgroundPrefab;
-    private Queue<GameObject> Backgrounds;
+    private List<GameObject> Backgrounds;
     private Vector3 NextPos;
     private float BackgroundHeight;
     public Vector3 StartPos;
@@ -15,18 +15,19 @@ public class BackgroundController : MonoBehaviour
     {
         NextPos = StartPos;
         BackgroundHeight = BackgroundPrefab.GetComponent<SpriteRenderer>().size.y;
-        Backgrounds = new Queue<GameObject>();        
+        Backgrounds = new List<GameObject>();        
     }
 
     private void CalcNextPos() { NextPos = NextPos + Vector3.up * BackgroundHeight * 2; }
 
     public void NextBackground() 
     {
-        Backgrounds.Enqueue(Instantiate(BackgroundPrefab, NextPos, Quaternion.identity));
+        Backgrounds.Add(Instantiate(BackgroundPrefab, NextPos, Quaternion.identity));
 
         if (Backgrounds.Count > 3) 
-        {
-           Destroy(Backgrounds.Dequeue());
+        {            
+            Destroy(Backgrounds[0]);           
+            Backgrounds.RemoveAt(0);
         }
 
         CalcNextPos();
@@ -39,10 +40,19 @@ public class BackgroundController : MonoBehaviour
             Destroy(bg);
         }
         
-        Backgrounds = new Queue<GameObject>();
+        Backgrounds = new List<GameObject>();
         NextPos = StartPos;
 
     }
 
+    public void Update()
+    {
+        if (Backgrounds[0].transform.position.y + BackgroundHeight < CameraExtensions.GetEdges(Camera.main)[3]) 
+        {
+            Destroy(Backgrounds[0]);
+            Backgrounds.RemoveAt(0);
+            NextBackground();
+        }
+    }
 
 }
