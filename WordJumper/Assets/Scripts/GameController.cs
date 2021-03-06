@@ -5,11 +5,11 @@ using UnityEngine;
 public  class GameController : MonoBehaviour
 {
     public PlayerController _Plr;
-    public PlatformController _Pfm;
+    public LevelGenerator _Gen;
     public ScoreController _Scr;
     public CameraController _Cmr;
 
-    [SerializeField]
+    //[SerializeField]
     Canvas _GameUI, _PausedUI, _GameOverUI, _PregameUI, _ScoreUI;
     
 
@@ -84,7 +84,7 @@ public  class GameController : MonoBehaviour
                 _GameOverUI.enabled = true;
                 _PausedUI.enabled = false;
                 break;
-            case "PREGAME": //TODO pregame 
+            case "PREGAME":
                 Time.timeScale = 0;
                 _PregameUI.enabled = true;
                 _PausedUI.enabled = false;
@@ -104,7 +104,7 @@ public  class GameController : MonoBehaviour
     public void Replay() // reset gameplay field (doesn't require scene reload)
     {
         _Plr.Replay();
-        _Pfm.Replay();
+        _Gen.Replay();
         _Scr.Replay();
         _Cmr.Replay();
         SetGamestate("PREGAME");

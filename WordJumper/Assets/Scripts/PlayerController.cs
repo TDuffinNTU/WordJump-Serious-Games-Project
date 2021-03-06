@@ -14,8 +14,7 @@ public class PlayerController : MonoBehaviour
     public float GravityScale = 2.2f;
     public Vector3 StartPos;
     public Vector3 CamStartPos = new Vector3(0,-.29f, -10f);
-    
-    private bool onFloor = false;
+  
 
     // Start is called before the first frame update
     void Start()
@@ -32,17 +31,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
-        rb.gravityScale = GravityScale;
-        onFloor = rb.GetContacts(new List<ContactPoint2D>()) > 0 ? true : false;
+        rb.gravityScale = GravityScale;        
 
         Vector3 InputX = new Vector3(Input.GetAxis("Horizontal"), 0, 0);     
-        transform.Translate(InputX * XSpeed * Time.deltaTime);
-
-        bool InputY = Input.GetKeyDown(KeyCode.Space);
-        if (rb.velocity.y <= 0 && onFloor)
-        {            
-            rb.velocity = new Vector2(rb.velocity.x, YSpeed);
-        }
+        transform.Translate(InputX * XSpeed * Time.deltaTime);    
 
         sr.flipX = InputX.x < 0 ? true : false;
 
@@ -74,6 +66,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   
     public Vector3 GetSize()
     {
         return sr.bounds.size;
