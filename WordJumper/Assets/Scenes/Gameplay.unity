@@ -1627,8 +1627,8 @@ MonoBehaviour:
   PlatformPrefab: {fileID: 6164048280512271783, guid: 07d2e091dc256ca4b87fd5d6b94409b3, type: 3}
   FirstPlatform: {x: 0, y: -0.45, z: 0}
   cols: 5
-  intervalY: 2.2
-  CoinChance: 1
+  intervalY: 2.25
+  CoinChance: 0.3
   CoinPrefab: {fileID: 8921591535270047997, guid: 3f19e4d690c2255449175b771c4808c9, type: 3}
 --- !u!4 &1544262589
 Transform:
