@@ -26,6 +26,8 @@ public class LevelGenerator : MonoBehaviour
     public float CoinChance = 0.1f;
     public GameObject CoinPrefab;
 
+    public bool GenerateCoins = true;
+
     // Start is called before the first frame update
     public void Start()
     {             
@@ -43,11 +45,7 @@ public class LevelGenerator : MonoBehaviour
         Instantiate(PlatformPrefab, FirstPlatform, Quaternion.identity);       
 
         // generate rows of platforms
-        GenerateRows(5);
-
-        // load background tiles
-        _BackgroundController.NextBackground();
-        _BackgroundController.NextBackground();        
+        GenerateRows(5);               
     }  
 
 
@@ -76,7 +74,7 @@ public class LevelGenerator : MonoBehaviour
                 row.RemoveAt(index);
             }
 
-            if (Random.value < CoinChance) 
+            if (Random.value < CoinChance && GenerateCoins) 
             {
                 // spawn coin based on random chance per row generated                
                 Instantiate(CoinPrefab, new Vector3(Random.Range(cameraEdges[0], cameraEdges[2]), nextY + 0.5f, 0), Quaternion.identity);
@@ -102,6 +100,7 @@ public class LevelGenerator : MonoBehaviour
         GameObject[] plats = GameObject.FindGameObjectsWithTag("Platform");
         foreach (var plat in plats) { Destroy(plat); }
         _BackgroundController.Replay();
+        GenerateCoins = true;
         Start();
     }
 }

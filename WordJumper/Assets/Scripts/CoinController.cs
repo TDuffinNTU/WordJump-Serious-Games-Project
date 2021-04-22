@@ -15,6 +15,7 @@ public class CoinController : MonoBehaviour
         //GetComponent<ScoreController>().AddScore(1);
         Destroy(gameObject);
         GameObject.FindObjectOfType<ScoreController>().AddScore(1);
+        GameObject.FindObjectOfType<GameController>().CoinCollected();
     }
 
     // Update is called once per frame

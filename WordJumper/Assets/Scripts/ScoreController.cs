@@ -7,6 +7,8 @@ public class ScoreController : MonoBehaviour
 {
 
     private int Score;
+    private float HighPoint;
+    private const float HIGHPOINTINTERVAL = 0.5f;
     private GameObject Player;
     private Text ScoreText;
 
@@ -15,16 +17,19 @@ public class ScoreController : MonoBehaviour
     {
         ScoreText = GetComponent<Text>();
         ScoreText.text = "0";
-        Score = 0;
+        Score = 0;        
         Player = GameObject.FindGameObjectWithTag("Player");
+        HighPoint = Player.transform.position.y / 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float yPos = Player.transform.position.y;
+     // TODO fix this scoring system (buggered mate)    
+        float halfYPos = Player.transform.position.y / 2;        
 
-        if (yPos/2 > Score) {
+        if (halfYPos > HighPoint + HIGHPOINTINTERVAL) {
+            HighPoint += HIGHPOINTINTERVAL;
             AddScore(1);
         }
     }

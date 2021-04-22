@@ -9,13 +9,16 @@ public class BackgroundController : MonoBehaviour
     private Vector3 NextPos;
     private float BackgroundHeight;
     public Vector3 StartPos;
+    //public bool MainMenuMode = false;
 
     // Start is called before the first frame update
     void Start()
     {
         NextPos = StartPos;
         BackgroundHeight = BackgroundPrefab.GetComponent<SpriteRenderer>().size.y;
-        Backgrounds = new List<GameObject>();        
+        Backgrounds = new List<GameObject>();
+        NextBackground();
+        NextBackground();
     }
 
     private void CalcNextPos() { NextPos = NextPos + Vector3.up * BackgroundHeight * 2; }
@@ -40,18 +43,22 @@ public class BackgroundController : MonoBehaviour
             Destroy(bg);
         }
         
+
         Backgrounds = new List<GameObject>();
         NextPos = StartPos;
+        NextBackground();
+        NextBackground();
 
     }
 
     public void Update()
-    {
+    {        
         if (Backgrounds[0].transform.position.y + BackgroundHeight < CameraExtensions.GetEdges(Camera.main)[3]) 
         {
             Destroy(Backgrounds[0]);
             Backgrounds.RemoveAt(0);
             NextBackground();
+
         }
     }
 

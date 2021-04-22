@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float GravityScale = 2.2f;
     public Vector3 StartPos;
     public Vector3 CamStartPos = new Vector3(0,-.29f, -10f);
+    public bool Frozen = true;
   
 
     // Start is called before the first frame update
@@ -30,7 +31,13 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
+        rb.simulated = !Frozen;
+        if (Frozen) 
+        {            
+            return;
+        } // Used in paused/unpause routines
+
         rb.gravityScale = GravityScale;        
 
         Vector3 InputX = new Vector3(Input.GetAxis("Horizontal"), 0, 0);     

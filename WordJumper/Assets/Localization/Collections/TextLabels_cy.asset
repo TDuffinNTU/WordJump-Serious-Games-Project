@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TextLabels_cy
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: cy
+  m_SharedData: {fileID: 11400000, guid: 9df66db176301f14b8d65c5866c1b949, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 212616970240
+    m_Localized: "SG\xD4R "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157721919488
+    m_Localized: 'Croeso i WordJump!
+
+      Defnyddiwch y SAETUHAU neu A&D i symud.
+
+      Presiwch
+      GOFOD i ddechrau!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 141267664896
+    m_Localized: GEM DROSODD!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7888797696
+    m_Localized: SEIBIO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 649140194607104
+    m_Localized: Chwarae
+    m_Metadata:
+      m_Items: []
+  - m_Id: 649108397588480
+    m_Localized: Credydau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 671623849279488
+    m_Localized: Sut i Chwarae
+    m_Metadata:
+      m_Items: []
+  - m_Id: 750669916372992
+    m_Localized: Llwytho Cwestiwnau Newydd
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1758208233668608
+    m_Localized: 'Gwall Formattio! Wnewch sicr bod eich feil .txt wedi''i formattio
+      fel hon:
+
+
+      [QUESTION] * [ATEB]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1758305478606848
+    m_Localized: 'Neidia i fyny ar platfformiau i sgorio pwntiau!
+
+
+      Casgla
+      ceiniog i ateb cwestiwnau i sgorio mwy ac adio i''ch amser!
+
+
+      Pan mae''r
+      gloch yn cyraedd 0, mae''n Gem Drossodd!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1772741803212800
+    m_Localized: Gosodiadau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1772850146279424
+    m_Localized: 'CELF
+
+      Pixel Adventure gan PixelFrog (Itch.io)
+
+
+      PORWR
+      FFEIL
+
+      AnotherFileManager gan Srejon Khan (Github)
+
+
+      CEFNOGAETH
+      MOESOL
+
+      Eden Wood, fy ffrindiau-gatre :)
+
+
+      CYFIEITHIADAU
+
+      Almaeneg
+      - Jess Lindsay
+
+      Cymraeg - Thomas Duffin'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1782746426212352
+    m_Localized: Iaith
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1
