@@ -31,4 +31,12 @@ Falling off the screen or running out of time will lead to you losing.
 
 If English isn't your first language, WordJump implements the *Unity Engine Localization* package that allows for easy development of alternative translations. Currently, only Welsh, German, and English are present, but I'll be happy to merge any pull requests with new translations!
 
+## 3.1 How to Contribute (Language Options)
+
+You'll need the following to contribute languages to this project:
+* Unity 2020.3.2f1 or Later: https://unity3d.com/get-unity/download
+* The project files (clone me!)
+* Unity Engine Documentation for the localization system: https://docs.unity3d.com/Packages/com.unity.localization@0.4/manual/index.html
+
+Once you've got the project installed and running locally, follow the Unity Docs to add your locale, and then open the localization table that will allow you to add your own translations. Then make a pull request to the project and I'll test and upload!
 
