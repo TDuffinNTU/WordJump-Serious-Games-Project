@@ -2,6 +2,9 @@
 Serious Games module project for my final year at NTU.
 VESVET is an EU initiative to encourage entrepreneurial learning in higher education: This project was built in collaborating with tutors and VESVET representatives that gave feedback to encourage development of a game to meet educational criteria.
 
+# Press
+Featured in [this article](https://isrg.org.uk/vesvet-added-value-games/)
+
 # How to Play
 
 ## 1. The Questions
